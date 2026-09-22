@@ -1,19 +1,38 @@
-# React + Vite
+# React Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tienda de productos simple construida con React, Tailwind CSS y Zustand. Incluye listado de productos, carrito de compras con persistencia, login básico y modo oscuro.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+## Características
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Listado de productos con imagen, precio, stock y rating
+- Carrito de compras con agregar, quitar y limpiar
+- Persistencia del carrito en localStorage
+- Login básico de usuario
+- Modo oscuro/claro con toggle
+- Diseño responsive
+- Componentes reutilizables
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## Tecnologías
 
-## Expanding the ESLint configuration
+- **React 19** — Librería de UI
+- **Vite 8** — Bundler y dev server
+- **Tailwind CSS 4** — Estilos
+- **Zustand 5** — Manejo de estado global
+- **Lucide React** — Iconos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/react-store.git
+
+# Entrar al directorio
+cd react-store
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
