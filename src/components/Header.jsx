@@ -20,7 +20,7 @@ export default function Header() {
     const logout = useAuthStore((state) => state.logout)
 
     return (
-        <header id="_header_breadcrumb_nav_h12_001" className={`relative bg-white dark:bg-neutral-950`}>
+        <header id="_header_breadcrumb_nav_h12_001" className={`relative bg-white dark:bg-transparent`}>
             {/* Main Header */}
             <div className="border-b border-slate-100 dark:border-neutral-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

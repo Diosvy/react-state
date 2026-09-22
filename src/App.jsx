@@ -13,12 +13,16 @@ import Product from './components/product'
 import ProductList from './components/ProductList'
 
 import Login from './components/Login'
+import Logup from './components/Logup'
 
 import Checkout from './components/Checkout'
 
 function App() {
   const isLoggedIn = useIsLoggedIn();
 
+  const [component, setComponent] = useState('Login')
+
+  const handleLink = () => component === 'Login' ? setComponent('Logout') : setComponent('Login')
 
   return (
     <>
@@ -31,9 +35,7 @@ function App() {
 
           </Layout>
         ) : (
-          <Layout>
-            <Login />
-          </Layout>
+          component === 'Login' ? <Login setLink={handleLink} /> : <Logup setLink={handleLink} />
 
         )
       }

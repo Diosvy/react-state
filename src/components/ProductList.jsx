@@ -35,9 +35,8 @@ export default function ProductList() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
                     {products.map((product, i) => (
-                        <a
+                        <div
                             key={i}
-                            href="#"
                             className="card mx-auto w-full max-w-sm md:mr-0 group"
                             data-motion="card"
                             style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}
@@ -69,7 +68,7 @@ export default function ProductList() {
                                 <div className="flex min-[400px]:items-center justify-between gap-2 flex-col min-[400px]:flex-row">
                                     <div className="flex items-center gap-2">
                                         <h6 className="font-semibold text-xl text-slate-900 dark:text-white">
-                                            {product.price}
+                                            ${product.price}
                                         </h6>
                                         <p className="py-1.5 px-3 rounded-full font-medium text-sm text-slate-700 dark:text-neutral-300 bg-slate-100 dark:bg-neutral-800">
                                             {product.delivery}
@@ -88,7 +87,7 @@ export default function ProductList() {
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     ))}
                 </div>
             </div>
