@@ -1,10 +1,12 @@
 import { ShoppingCart } from 'lucide-react';
 
 import { useCartStore, useTotalItems } from '../store/useCartStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function CartIcon({ onClick }) {
 
-    const count = useTotalItems();
+    const user = useAuthStore((state) => state.user)
+    const count = useTotalItems(user.name);
 
 
     return (

@@ -1,11 +1,14 @@
 import { PlusCircle } from 'lucide-react';
 
 import { useCartStore } from '../store/useCartStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 import { productos } from '../data/productos';
 
 export default function ProductList() {
     const products = productos;
+
+    const user = useAuthStore((state) => state.user)
 
     const add = useCartStore((state) => state.add)
 
@@ -54,7 +57,7 @@ export default function ProductList() {
                                 <div className='flex justify-end' >
                                     <button
                                         type="button"
-                                        onClick={() => add(product)}
+                                        onClick={() => add(product, user.name)}
                                         aria-label="Agregar al carrito"
                                         className="p-1 bg-indigo-500 hover:bg-indigo-900 cursor-pointer text-white rounded transition-colors"
                                     >

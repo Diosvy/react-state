@@ -12,10 +12,11 @@ export const useAuthStore = create(persist(
             set((state)=>{
                 const exist = state.users.find((i) => i.name === name)
                 if(!exist){
-                    return {user: {name, password}, users: [...state.users, {name, password }]}
+                    return {user: {name, password}, users: [...state.users, {name, password }], error: null,}
                 }
                 return {
-                    ...state, user: null
+                    user: null,
+                    error: 'El usuario ya existe' 
                 }               
             })
 
@@ -23,23 +24,17 @@ export const useAuthStore = create(persist(
         ),
 
         login: (name, password)=> set((state)=>{
-            const exist = state.users.findIndex((i) => i.name === name)
-            if( exist!= -1){
-                if(state.users[exist].password != password){
-                    return {
-                        ...state, 
-                        user: null
-                    }
-                }
-                return {
-                    ...state,
-                    user: {name, password}
-                }
+            if (state.user) return { user: state.user };
+
+            const user = state.users.find((i) => i.name === name)
+            if(!user){
+                return { user: null, error: 'Usuario no encontrado' }
             }
+            if (user.password !== password) return { user: null, error: 'Contraseña incorrecta' };
 
             return {
-                ...state, 
-                user: null
+                user: {name, password},
+                error: null
             }
         }),
 
@@ -47,9 +42,6 @@ export const useAuthStore = create(persist(
             user: null
         }),
 
-        changeName: (newName)=> set((state)=>({
-            user: state.user ? {...state.user, name: newName} : null
-        }))
 
     })
     ,{
@@ -58,3 +50,4 @@ export const useAuthStore = create(persist(
 ))
 
 export const useIsLoggedIn = () => useAuthStore((state)=> state.user != null)
+

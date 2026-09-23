@@ -1,9 +1,13 @@
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { useCartStore, useTotalPrice } from '../store/useCartStore';
+import { useCartStore, useTotalPrice, useTotalItems, useItemUser } from '../store/useCartStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function Checkout() {
-    const items = useCartStore((state) => state.items);
 
+    const user = useAuthStore((state) => state.user)
+
+
+    const items = useItemUser(user.name)
     const setItems = useCartStore((state) => state.setItems)
 
     const add = useCartStore((state) => state.add);
@@ -91,7 +95,7 @@ export default function Checkout() {
                                                 {item.name}
                                             </h3>
                                             <button
-                                                onClick={() => del(item.id)}
+                                                onClick={() => del(item.id, user.name)}
                                                 aria-label={`Eliminar ${item.name}`}
                                                 className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors shrink-0"
                                             >
@@ -106,7 +110,7 @@ export default function Checkout() {
                                             {/* Contador */}
                                             <div className="flex items-center gap-1 bg-slate-100 dark:bg-neutral-800 rounded-xl p-1">
                                                 <button
-                                                    onClick={() => disminuir(item.id)}
+                                                    onClick={() => disminuir(item.id, user.name)}
                                                     aria-label="Disminuir cantidad"
                                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-neutral-700 text-slate-600 dark:text-neutral-300 transition-colors"
                                                 >
@@ -116,7 +120,7 @@ export default function Checkout() {
                                                     {item.stock}
                                                 </span>
                                                 <button
-                                                    onClick={() => add(item)}
+                                                    onClick={() => add(item, user.name)}
                                                     aria-label="Aumentar cantidad"
                                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-neutral-700 text-slate-600 dark:text-neutral-300 transition-colors"
                                                 >
@@ -171,7 +175,7 @@ export default function Checkout() {
                             </button>
                             <button
                                 type="button"
-                                onClick={setItems}
+                                onClick={() => setItems(user.name)}
                                 className="w-full py-4 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-medium rounded-xl transition-colors mb-3 inline-flex items-center justify-center gap-2"
                             >
                                 <Trash2 className="w-5 h-5" />
