@@ -1,4 +1,6 @@
 // src/components/Header.jsx
+import { LogOut } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { useUIStore } from "../store/useUIStore"
 import { useAuthStore, useIsLoggedIn } from "../store/useAuthStore";
 
@@ -10,6 +12,8 @@ import CartIcon from "./CartIcon";
 
 
 export default function Header() {
+    const [open, setOpen] = useState(false);
+    const menuRef = useRef(null);
 
     const theme = useUIStore((state) => state.theme)
     const toggleTema = useUIStore((state) => state.toggleTheme)
@@ -18,6 +22,17 @@ export default function Header() {
     const isLoggedIn = useIsLoggedIn()
 
     const logout = useAuthStore((state) => state.logout)
+    const user = useAuthStore((state) => state.user)
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <header id="_header_breadcrumb_nav_h12_001" className={`relative bg-white dark:bg-transparent`}>
@@ -49,32 +64,27 @@ export default function Header() {
                                 href="#"
                                 className="text-sm font-medium text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
-                                Documentation
+                                Tienda
                             </a>
                             <a
                                 href="#"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
-                                API Reference
+                                Mi Perfil
                             </a>
                             <a
                                 href="#"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
-                                Guides
+                                Favoritos
                             </a>
                             <a
                                 href="#"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
-                                Examples
+                                Mis Pedidos
                             </a>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                            >
-                                Community
-                            </a>
+
                         </nav>
 
                         {/* Right Actions */}
@@ -119,19 +129,62 @@ export default function Header() {
                             </button>
 
                             <div
-                                className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors"
+                                className="w-9 h-9 flex items-center justify-center rounded-lg"
                             >
                                 {
                                     isLoggedIn ? (
 
-                                        <button
-                                            data-motion="button"
-                                            onClick={logout}
-                                            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors"
-                                            style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}
+                                        <div
+                                            ref={menuRef}
+                                            className="relative"
+                                            onMouseEnter={() => setOpen(true)}
+                                            onMouseLeave={() => setOpen(false)}
                                         >
-                                            <CircleUserRound className="w-5 h-5 text-slate-600 dark:text-neutral-400" />
-                                        </button>
+                                            {/* Botón del avatar */}
+                                            <button
+                                                data-motion="button"
+                                                onClick={() => setOpen((prev) => !prev)}
+                                                aria-label="Menú de usuario"
+                                                aria-expanded={open}
+                                                className="w-9 h-9 flex items-center justify-center rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-neutral-800"
+                                                style={{ opacity: 1, transform: 'translateY(0px)', filter: 'blur(0px)' }}
+                                            >
+                                                <span className="w-7 h-7 flex items-center justify-center rounded-full bg-indigo-500 text-white text-sm font-semibold uppercase">
+                                                    {user.name[0]}
+                                                </span>
+                                            </button>
+
+                                            {/* Menú desplegable */}
+                                            <div
+                                                className={`absolute right-0 top-full  w-56 origin-top-right rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-lg transition-all duration-200 ${open
+                                                    ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
+                                                    : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'
+                                                    }`}
+                                            >
+                                                {/* Nombre completo */}
+                                                <div className="px-4 py-3 border-b border-slate-100 dark:border-neutral-800">
+                                                    <p className="text-xs text-slate-500 dark:text-neutral-500 mb-0.5">
+                                                        Sesión iniciada como
+                                                    </p>
+                                                    <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                                                        {user.name}
+                                                    </p>
+                                                </div>
+
+                                                {/* Botón cerrar sesión */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        logout();
+                                                        setOpen(false);
+                                                    }}
+                                                    className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-b-xl"
+                                                >
+                                                    <LogOut className="w-4 h-4" />
+                                                    Cerrar sesión
+                                                </button>
+                                            </div>
+                                        </div>
 
 
                                     ) : (
