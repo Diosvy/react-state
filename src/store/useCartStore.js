@@ -33,7 +33,7 @@ export const useCartStore = create(
             }),
 
             delete: (id, userName)=>set((state)=>({
-                items: state.items.filter((i)=>i.id != id && i.userName != userName)
+                items: state.items.filter((i)=>i.id != id || i.userName !== userName)
             })),
 
             setItems: (userName)=> set((state)=>({items: state.items.filter((i)=>i.userName!=userName)})),
