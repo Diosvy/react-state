@@ -3,10 +3,12 @@ import { PlusCircle } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
-import { productos } from '../data/productos';
+import { useLoaderData } from "react-router";
+
+
 
 export default function ProductList() {
-    const products = productos;
+    const productos = useLoaderData();
 
     const user = useAuthStore((state) => state.user)
 
@@ -37,7 +39,7 @@ export default function ProductList() {
                     </span>
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
-                    {products.map((product, i) => (
+                    {productos.map((product, i) => (
                         <div
                             key={i}
                             className="card mx-auto w-full max-w-sm md:mr-0 group"

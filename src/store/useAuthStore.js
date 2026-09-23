@@ -2,41 +2,55 @@ import {create} from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export const useAuthStore = create(persist(
-    (set)=>({
+    (set, get)=>({
         user: null,
 
         users: [],
 
-        logup: (name, password)=> (
+        error: null,
+
+        logup: (name, password)=> {
+            const state = get() //obtener el estado actual
             
-            set((state)=>{
-                const exist = state.users.find((i) => i.name === name)
-                if(!exist){
-                    return {user: {name, password}, users: [...state.users, {name, password }], error: null,}
-                }
-                return {
-                    user: null,
-                    error: 'El usuario ya existe' 
-                }               
-            })
+            const exist = state.users.find((i)=>i.name === name)
+
+            if(exist){
+                set({error: 'El usuario ya existe'})
+                return {error: 'El usuario ya existe'}
+            }
+
+            set((state) => ({
+                user: { name, password },
+                users: [...state.users, { name, password }],
+                error: null,
+            }));
 
 
-        ),
+            return {error: null}
+        },
 
-        login: (name, password)=> set((state)=>{
-            if (state.user) return { user: state.user };
+        login: (name, password)=> {
+
+            const state = get()
+
+            if (state.user) set({ user: state.user });
 
             const user = state.users.find((i) => i.name === name)
+            
             if(!user){
+                set({ user: null, error: 'Usuario no encontrado' })
                 return { user: null, error: 'Usuario no encontrado' }
             }
+
             if (user.password !== password) return { user: null, error: 'Contraseña incorrecta' };
 
-            return {
+            set({
                 user: {name, password},
                 error: null
-            }
-        }),
+            })
+
+            return {error: null}
+        },
 
         logout: ()=> set({
             user: null

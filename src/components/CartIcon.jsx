@@ -1,19 +1,21 @@
 import { ShoppingCart } from 'lucide-react';
 
+import { NavLink } from "react-router"
+
 import { useCartStore, useTotalItems } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
-export default function CartIcon({ onClick }) {
+export default function CartIcon() {
 
     const user = useAuthStore((state) => state.user)
-    const count = useTotalItems(user.name);
+    const count = useTotalItems(user?.name);
 
 
     return (
-        <button
-            onClick={onClick}
+        <NavLink
+            to={'/checkout'}
             aria-label={`Carrito de compras, ${count} productos`}
-            className="relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors"
+            className={`relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors`}
         >
             <ShoppingCart className="w-5 h-5 text-slate-600 dark:text-neutral-400" />
 
@@ -22,6 +24,6 @@ export default function CartIcon({ onClick }) {
                     {count > 99 ? '99+' : count}
                 </span>
             )}
-        </button>
+        </NavLink>
     );
 }

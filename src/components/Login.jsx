@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
+import { Link } from 'react-router'
+
 import { useAuthStore } from '../store/useAuthStore';
 import { Moon, Sun } from 'lucide-react';
 
@@ -8,6 +12,7 @@ export default function Login({ setLink }) {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const [error, setError] = useState(null);
 
@@ -23,12 +28,17 @@ export default function Login({ setLink }) {
         if (!name || !password) {
             return null
         }
-        login(name, password)
+        const result = login(name, password)
 
-        if (!user) {
-            setError('Credenciales Incorrectas o usuario inexistente')
+        if (result.error) {
+            setError(result.error)
+            return null
         }
-        console.log({ name, password });
+
+        navigate('/')
+
+
+
     };
 
     return (
@@ -196,12 +206,13 @@ export default function Login({ setLink }) {
                         {/* Footer */}
                         <p className="text-center text-sm text-slate-500 dark:text-neutral-400 mt-6">
                             ¿No tienes cuenta?{' '}
-                            <span
+                            <Link
+                                to="/logup"
                                 onClick={setLink}
                                 className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer "
                             >
                                 Regístrate
-                            </span>
+                            </Link>
                         </p>
                     </div>
                 </div>

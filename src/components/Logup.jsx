@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { Moon, Sun } from 'lucide-react';
 
+import { useNavigate } from 'react-router';
+import { Link } from "react-router"
+
 import { useUIStore } from '../store/useUIStore.js'
 
 export default function Logup({ setLink }) {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setconfirmPassword] = useState('');
@@ -21,7 +25,7 @@ export default function Logup({ setLink }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Aquí luego conectarás con tu store de Zustand:
+
         if (!name || !password) {
             return null
         }
@@ -29,11 +33,13 @@ export default function Logup({ setLink }) {
             setError('Las contraseñas no coinciden')
             return null
         }
-        logup(name, password)
-        if (!user) {
-            setError('Nombre en uso, Por favor utilizar otro')
+        const result = logup(name, password)
+
+        if (result.error) {
+            setError(result.error)
+            return null
         }
-        console.log({ usuarios: users });
+        return navigate('/');
     };
 
     return (
@@ -267,12 +273,12 @@ export default function Logup({ setLink }) {
                         {/* Footer */}
                         <p className="text-center text-sm text-slate-500 dark:text-neutral-400 mt-6">
                             ¿Ya tienes cuenta?{' '}
-                            <span
-                                onClick={setLink}
+                            <Link
+                                to={'/login'}
                                 className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer "
                             >
                                 Inicia Sesión
-                            </span>
+                            </Link>
                         </p>
                     </div>
                 </div>

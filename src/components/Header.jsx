@@ -1,6 +1,10 @@
 // src/components/Header.jsx
 import { LogOut } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { NavLink } from "react-router"
+import { useNavigate } from 'react-router';
+
+
 import { useUIStore } from "../store/useUIStore"
 import { useAuthStore, useIsLoggedIn } from "../store/useAuthStore";
 
@@ -12,6 +16,7 @@ import CartIcon from "./CartIcon";
 
 
 export default function Header() {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -33,6 +38,12 @@ export default function Header() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    const handleLogout = () => {
+        logout();
+        setOpen(false);
+        navigate('/login');  // 👈 redirige al login
+    };
 
     return (
         <header id="_header_breadcrumb_nav_h12_001" className={`relative bg-white dark:bg-transparent`}>
@@ -60,12 +71,12 @@ export default function Header() {
                             className="hidden lg:flex items-center gap-6"
                             style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}
                         >
-                            <a
-                                href="#"
+                            <NavLink
+                                to={'/'}
                                 className="text-sm font-medium text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
                                 Tienda
-                            </a>
+                            </NavLink>
                             <a
                                 href="#"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
@@ -174,10 +185,7 @@ export default function Header() {
                                                 {/* Botón cerrar sesión */}
                                                 <button
                                                     type="button"
-                                                    onClick={() => {
-                                                        logout();
-                                                        setOpen(false);
-                                                    }}
+                                                    onClick={handleLogout}
                                                     className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-b-xl"
                                                 >
                                                     <LogOut className="w-4 h-4" />
