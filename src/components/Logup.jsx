@@ -114,6 +114,7 @@ export default function Logup({ setLink }) {
                                     <input
                                         id="name"
                                         type="text"
+                                        autoComplete='username'
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="tu_usuario"
@@ -150,6 +151,7 @@ export default function Logup({ setLink }) {
                                     <input
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
+                                        autoComplete='current-password'
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••"
@@ -215,8 +217,9 @@ export default function Logup({ setLink }) {
                                         </svg>
                                     </div>
                                     <input
-                                        id="password"
+                                        id="new-password"
                                         type={showPassword ? 'text' : 'password'}
+                                        autoComplete='current-password'
                                         value={confirmPassword}
                                         onChange={(e) => setconfirmPassword(e.target.value)}
                                         placeholder="••••••••"

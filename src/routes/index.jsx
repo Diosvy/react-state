@@ -9,12 +9,14 @@ import { productLoader } from "../loaders/productLoader";
 import { requireAuth } from "../loaders/authLoader";
 import Login from "../components/Login";
 import Logup from "../components/Logup";
+import Spinner from "../components/Spinner";
 
 const router = createBrowserRouter(
     [
         {
             path: "/",
             element: <Layout />,
+            hydrateFallbackElement: <Spinner />,
             loader: requireAuth,
             children: [
                 {

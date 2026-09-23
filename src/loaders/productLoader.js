@@ -1,11 +1,14 @@
 export const productLoader = async () => {
-    const mod = await import('../data/productos.js');
-    
-    console.log("viendo el modulo ",mod)
+  const mod = await import('../data/productos.js');
+  const { productos } = mod;
 
-    const { productos } = mod;
-    
-    return productos;
+  
+  const productosPromise = new Promise((resolve) =>
+    setTimeout(() => resolve(productos), 2000)
+  );
+
+
+  return { productos: productosPromise };
 };
 
 

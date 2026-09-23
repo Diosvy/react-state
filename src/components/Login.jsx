@@ -113,6 +113,7 @@ export default function Login({ setLink }) {
                                     <input
                                         id="name"
                                         type="text"
+                                        autoComplete="username"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="tu_usuario"
@@ -149,6 +150,7 @@ export default function Login({ setLink }) {
                                     <input
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
+                                        autoComplete="current-password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••"

@@ -2,6 +2,8 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { useCartStore, useTotalPrice, useTotalItems, useItemUser } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
+import { Link } from "react-router"
+
 export default function Checkout() {
 
     const user = useAuthStore((state) => state.user)
@@ -33,13 +35,13 @@ export default function Checkout() {
                     <p className="text-slate-500 dark:text-neutral-400 mb-6">
                         Agrega algunos productos para continuar con tu compra.
                     </p>
-                    <a
-                        href="/"
+                    <Link
+                        to="/"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Volver a la tienda
-                    </a>
+                    </Link>
                 </div>
             </div>
         );
@@ -50,13 +52,13 @@ export default function Checkout() {
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <a
-                        href="/"
+                    <Link
+                        to="/"
                         className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-4"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Seguir comprando
-                    </a>
+                    </Link>
                     <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                         Tu carrito
                     </h1>
