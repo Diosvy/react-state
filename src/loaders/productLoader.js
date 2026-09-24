@@ -7,7 +7,6 @@ export const productLoader = async () => {
     setTimeout(() => resolve(productos), 2000)
   );
 
-
   return { productos: productosPromise };
 };
 

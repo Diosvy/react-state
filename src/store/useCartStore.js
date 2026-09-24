@@ -4,8 +4,44 @@ import { useShallow } from 'zustand/react/shallow';
 
 export const useCartStore = create(
     persist(
-        (set)=>({
+        (set, get)=>({
             items: [],
+
+            favoritesItems: [],
+
+            toggleFavoriteItem: (idF) => {
+                const state = get()
+
+                console.log("Viendo el id q llega", idF)
+
+                if(state.favoritesItems.lenght === 0){
+
+                    console.log('entro al if')
+
+                    const product = state.items.find((i) => i.id === idF)
+                
+                    return set({
+                        favoritesItems: [...state.favoritesItems, product]
+                    })
+   
+                }
+                 console.log('salio del if')
+
+                const productFavorite = state.favoritesItems.find((i) => i.id === idF)
+
+                if(productFavorite){
+                    set({
+                        favoritesItems: state.favoritesItems.filter((i) => i.id != productFavorite.id)
+                    })
+                    return null
+                }
+
+                const product = state.items.find((i) => (i.id === idF))
+                
+                set({
+                    favoritesItems: [...state.favoritesItems, product]
+                })
+            },
 
             add: (product, userName)=>set((state)=>{
                 const existing = state.items.find((i)=>i.id === product.id && i.userName === userName )

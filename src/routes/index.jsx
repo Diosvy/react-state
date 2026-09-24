@@ -4,6 +4,7 @@ import Layout from "../components/Layout"
 
 import ProductList from "../components/ProductList";
 import Checkout from "../components/Checkout"
+import FavoritePage from "../pages/FavoritePage";
 
 import { productLoader } from "../loaders/productLoader";
 import { requireAuth } from "../loaders/authLoader";
@@ -27,6 +28,10 @@ const router = createBrowserRouter(
                 {
                     path: "checkout",
                     element: <Checkout />
+                },
+                {
+                    path: "favoritos",
+                    element: <FavoritePage />
                 },
             ]
         },

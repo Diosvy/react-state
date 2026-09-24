@@ -1,4 +1,4 @@
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Heart } from 'lucide-react';
 
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
@@ -17,6 +17,7 @@ export default function ProductList() {
     const user = useAuthStore((state) => state.user)
 
     const add = useCartStore((state) => state.add)
+    const toggleFavorite = useCartStore((state) => state.toggleFavoriteItem)
 
     return (
         <Suspense fallback={<Spinner />} >
@@ -64,7 +65,15 @@ export default function ProductList() {
                                             />
                                         </div>
                                         <div className="body border border-t-0 border-slate-200 dark:border-neutral-700 w-full rounded-b-3xl p-5 shadow-xs shadow-transparent cursor-pointer transition-all duration-500 group-hover:shadow-slate-300 dark:group-hover:shadow-neutral-700 group-hover:bg-slate-50 dark:group-hover:bg-neutral-800/50 group-hover:border-slate-300 dark:group-hover:border-neutral-600">
-                                            <div className='flex justify-end' >
+                                            <div className='flex gap-2 justify-end' >
+                                                <button
+                                                    type="button"
+                                                    onClick={() => toggleFavorite(product.id)}
+                                                    aria-label="Agregar a favoritos"
+                                                    className="p-1 bg-transparent cursor-pointer text-white rounded transition-colors"
+                                                >
+                                                    <Heart className="w-5 h-5 hover:text-red-600 " />
+                                                </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => add(product, user.name)}

@@ -83,12 +83,12 @@ export default function Header() {
                             >
                                 Mi Perfil
                             </a>
-                            <a
-                                href="#"
+                            <NavLink
+                                to="/favoritos"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                             >
                                 Favoritos
-                            </a>
+                            </NavLink>
                             <a
                                 href="#"
                                 className="text-sm font-medium text-slate-600 dark:text-neutral-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
