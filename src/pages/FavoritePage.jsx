@@ -1,21 +1,21 @@
-import { ShoppingBag, ArrowLeft } from 'lucide-react'
+import { ShoppingBag, ArrowLeft, PlusCircle, Heart } from 'lucide-react'
 import { Link } from 'react-router'
 
-import { useCartStore } from '../store/useCartStore'
+import { useCartStore, useGetItemsByIds } from '../store/useCartStore'
 
 export default function FavoritePage() {
 
     const favoritesItems = useCartStore((state) => (state.favoritesItems))
-
+    const toggleFavorite = useCartStore((state) => state.toggleFavoriteItem)
 
     return (
         <section
             id="_productlist_bordered_cards_delivery_001"
-            className="py-10 "
+            className="py-2 h-full "
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="font-semibold text-3xl text-slate-900 dark:text-white mb-8 text-center">
-                    <span data-animate="heading" style={{ opacity: 1 }}>
+            <div className="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full  ">
+                <h2 className="font-semibold text-3xl text-slate-900 dark:text-white  text-center ">
+                    <span data-animate="heading" style={{ opacity: 1 }} className='block' >
                         {["Tus ", "Favoritos"].map((word, i) => (
                             <span
                                 key={i}
@@ -31,9 +31,19 @@ export default function FavoritePage() {
                             </span>
                         ))}
                     </span>
+
                 </h2>
+                {
+                    favoritesItems.length !== 0 && (
+                        <p className="font-normal text-center text-slate-500 dark:text-neutral-400  text-md mb-3">
+                            {favoritesItems.length} {favoritesItems.length === 1 ? 'producto' : 'productos'} en tus favoritos
+                        </p>
+                    )
+                }
+
+
                 {favoritesItems.length === 0 && (
-                    <div className="flex items-center justify-center  ">
+                    <div className="flex-1 flex items-center justify-center  ">
                         <div className="text-center max-w-md">
                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-neutral-800 mb-6">
                                 <ShoppingBag className="w-10 h-10 text-slate-400 dark:text-neutral-500" />
@@ -54,7 +64,7 @@ export default function FavoritePage() {
                         </div>
                     </div>)
                 }
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
+                <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
                     {
                         favoritesItems.map((product, i) => (
                             <div
@@ -73,7 +83,15 @@ export default function FavoritePage() {
                                     />
                                 </div>
                                 <div className="body border border-t-0 border-slate-200 dark:border-neutral-700 w-full rounded-b-3xl p-5 shadow-xs shadow-transparent cursor-pointer transition-all duration-500 group-hover:shadow-slate-300 dark:group-hover:shadow-neutral-700 group-hover:bg-slate-50 dark:group-hover:bg-neutral-800/50 group-hover:border-slate-300 dark:group-hover:border-neutral-600">
-                                    <div className='flex justify-end' >
+                                    <div className='flex gap-2 justify-end' >
+                                        <button
+                                            type="button"
+                                            onClick={() => toggleFavorite(product)}
+                                            aria-label="Agregar a favoritos"
+                                            className="p-1 bg-transparent cursor-pointer rounded transition-colors"
+                                        >
+                                            <Heart className="font-bold text-2xl text-red-600 hover:text-indigo-500 dark:hover:text-white  hover:scale-115 transition-all delay-150  " />
+                                        </button>
                                         <button
                                             type="button"
                                             onClick={() => add(product, user.name)}

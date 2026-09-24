@@ -9,38 +9,27 @@ export const useCartStore = create(
 
             favoritesItems: [],
 
-            toggleFavoriteItem: (idF) => {
+            toggleFavoriteItem: (newProduct) => {
                 const state = get()
 
-                console.log("Viendo el id q llega", idF)
-
-                if(state.favoritesItems.lenght === 0){
-
-                    console.log('entro al if')
-
-                    const product = state.items.find((i) => i.id === idF)
-                
+                if(state.favoritesItems.length === 0){
                     return set({
-                        favoritesItems: [...state.favoritesItems, product]
+                        favoritesItems: [newProduct]
                     })
-   
-                }
-                 console.log('salio del if')
-
-                const productFavorite = state.favoritesItems.find((i) => i.id === idF)
-
-                if(productFavorite){
-                    set({
-                        favoritesItems: state.favoritesItems.filter((i) => i.id != productFavorite.id)
-                    })
-                    return null
                 }
 
-                const product = state.items.find((i) => (i.id === idF))
-                
-                set({
-                    favoritesItems: [...state.favoritesItems, product]
+                const contain = state.favoritesItems.includes(newProduct)
+
+                if(contain){
+                    return set({
+                        favoritesItems: state.favoritesItems.filter((product) => product !== newProduct)
+                    })
+                    
+                }
+                return set({
+                    favoritesItems: [...state.favoritesItems, newProduct]
                 })
+                
             },
 
             add: (product, userName)=>set((state)=>{
@@ -93,4 +82,6 @@ export const useTotalPrice = () => useCartStore((state)=> state.items.reduce((ac
 
 export const useItemUser = (name) => useCartStore(useShallow((state)=> state.items.filter((i)=>i.userName === name)))
 
-export const useTotalItems = (name) => useItemUser(name).reduce((acc, i)=>acc + i.stock, 0)
+export const useTotalItems = (name) => useItemUser(name).reduce((acc, i)=> acc + i.stock, 0)
+
+export const useGetItemsByIds = (ids) => useCartStore(useShallow((state) => ids.map(( id ) => state.items.find(( item ) => item.id === id))))

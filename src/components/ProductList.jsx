@@ -68,11 +68,11 @@ export default function ProductList() {
                                             <div className='flex gap-2 justify-end' >
                                                 <button
                                                     type="button"
-                                                    onClick={() => toggleFavorite(product.id)}
+                                                    onClick={() => toggleFavorite(product)}
                                                     aria-label="Agregar a favoritos"
                                                     className="p-1 bg-transparent cursor-pointer text-white rounded transition-colors"
                                                 >
-                                                    <Heart className="w-5 h-5 hover:text-red-600 " />
+                                                    <Heart className=" hover:text-red-600 text-indigo-500 dark:text-white hover:scale-115 transition-all delay-150   " />
                                                 </button>
                                                 <button
                                                     type="button"
