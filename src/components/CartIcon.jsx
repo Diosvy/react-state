@@ -8,7 +8,8 @@ import { useAuthStore } from '../store/useAuthStore';
 export default function CartIcon() {
 
     const user = useAuthStore((state) => state.user)
-    const count = useTotalItems(user?.name);
+    // const count = useTotalItems(user?.name);
+    const count = useTotalItems(user.name);
 
 
     return (

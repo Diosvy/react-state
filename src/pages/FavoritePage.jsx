@@ -1,12 +1,19 @@
 import { ShoppingBag, ArrowLeft, PlusCircle, Heart } from 'lucide-react'
 import { Link } from 'react-router'
 
-import { useCartStore, useGetItemsByIds } from '../store/useCartStore'
+import { useCartStore, useFavoritesUserItems } from '../store/useCartStore'
+import { useAuthStore } from '../store/useAuthStore'
 
 export default function FavoritePage() {
 
-    const favoritesItems = useCartStore((state) => (state.favoritesItems))
-    const toggleFavorite = useCartStore((state) => state.toggleFavoriteItem)
+    const user = useAuthStore((state) => state.user)
+
+    console.log('Viendo el user desde la pagina favoritos', user)
+
+    const favoritesItems = useFavoritesUserItems(user.name)
+    const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
+
+
 
     return (
         <section
@@ -86,7 +93,7 @@ export default function FavoritePage() {
                                     <div className='flex gap-2 justify-end' >
                                         <button
                                             type="button"
-                                            onClick={() => toggleFavorite(product)}
+                                            onClick={() => toggleFavoriteItem(product, user.name)}
                                             aria-label="Agregar a favoritos"
                                             className="p-1 bg-transparent cursor-pointer rounded transition-colors"
                                         >

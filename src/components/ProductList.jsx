@@ -17,7 +17,7 @@ export default function ProductList() {
     const user = useAuthStore((state) => state.user)
 
     const add = useCartStore((state) => state.add)
-    const toggleFavorite = useCartStore((state) => state.toggleFavoriteItem)
+    const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
 
     return (
         <Suspense fallback={<Spinner />} >
@@ -68,7 +68,7 @@ export default function ProductList() {
                                             <div className='flex gap-2 justify-end' >
                                                 <button
                                                     type="button"
-                                                    onClick={() => toggleFavorite(product)}
+                                                    onClick={() => toggleFavoriteItem(product, user.name)}
                                                     aria-label="Agregar a favoritos"
                                                     className="p-1 bg-transparent cursor-pointer text-white rounded transition-colors"
                                                 >

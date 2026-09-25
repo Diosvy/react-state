@@ -1,5 +1,5 @@
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { useCartStore, useTotalPrice, useTotalItems, useItemUser } from '../store/useCartStore';
+import { useCartStore, useTotalPrice, useTotalItems, useUserItems } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
 import { Link } from "react-router"
@@ -9,7 +9,8 @@ export default function Checkout() {
     const user = useAuthStore((state) => state.user)
 
 
-    const items = useItemUser(user.name)
+    const items = useUserItems(user.name) || []
+
     const setItems = useCartStore((state) => state.setItems)
 
     const add = useCartStore((state) => state.add);
@@ -17,7 +18,7 @@ export default function Checkout() {
 
     const disminuir = useCartStore((state) => state.disminuir);
 
-    const subtotal = useTotalPrice();
+    const subtotal = useTotalPrice(user.name);
 
     const envio = subtotal > 0 ? 5 : 0;
     const total = subtotal + envio;
