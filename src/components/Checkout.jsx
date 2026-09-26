@@ -11,12 +11,12 @@ export default function Checkout() {
 
     const items = useUserItems(user.name) || []
 
-    const setItems = useCartStore((state) => state.setItems)
+    const clearCart = useCartStore((state) => state.clearCart)
 
     const add = useCartStore((state) => state.add);
     const del = useCartStore((state) => state.delete);
 
-    const disminuir = useCartStore((state) => state.disminuir);
+    const decrease = useCartStore((state) => state.decrease);
 
     const subtotal = useTotalPrice(user.name);
 
@@ -73,7 +73,7 @@ export default function Checkout() {
                     <div className="lg:col-span-2 space-y-4">
                         {items.map((item) => {
                             const precio = parseFloat(String(item.price).replace('$', '')) || 0;
-                            const subtotalItem = precio * item.stock;
+                            const subtotalItem = precio * item.quantity;
 
                             return (
                                 <div
@@ -113,14 +113,14 @@ export default function Checkout() {
                                             {/* Contador */}
                                             <div className="flex items-center gap-1 bg-slate-100 dark:bg-neutral-800 rounded-xl p-1">
                                                 <button
-                                                    onClick={() => disminuir(item.id, user.name)}
+                                                    onClick={() => decrease(item.id, user.name)}
                                                     aria-label="Disminuir cantidad"
                                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-neutral-700 text-slate-600 dark:text-neutral-300 transition-colors"
                                                 >
                                                     <Minus className="w-4 h-4" />
                                                 </button>
                                                 <span className="w-10 text-center font-medium text-slate-900 dark:text-white">
-                                                    {item.stock}
+                                                    {item.quantity}
                                                 </span>
                                                 <button
                                                     onClick={() => add(item, user.name)}
@@ -178,7 +178,7 @@ export default function Checkout() {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => setItems(user.name)}
+                                onClick={() => clearCart(user.name)}
                                 className="w-full py-4 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-medium rounded-xl transition-colors mb-3 inline-flex items-center justify-center gap-2"
                             >
                                 <Trash2 className="w-5 h-5" />

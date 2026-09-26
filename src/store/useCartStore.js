@@ -5,44 +5,26 @@ import { useShallow } from 'zustand/react/shallow';
 export const useCartStore = create(
     persist(
         (set, get)=>({
-            items: [],
+            items: {},
 
-            favoritesItems: [],
+            favoritesItems: {},
 
-            toggleFavoriteItem: (newProduct, userName) => {
-                const state = get()
+            toggleFavoriteItem: (newProduct, userName) => (
+                set((state)=>{
+                    if(!userName ) return state
+                        
+                    const userItems = state.favoritesItems[userName] || []
 
-                if(!userName){
-                    console.log('falta usuario', userName)
-                    return null
-                }
+                    const exist = userItems.some((p) => p.id === newProduct.id)
 
-                console.log('viendo el userName', userName)
-
-                const userItems = state.favoritesItems[userName] || []
-
-                const contain = userItems.includes(newProduct)
-
-                if(contain){
-                    return set({
-                        favoritesItems: {
+                    return {
+                        favoritesItems:{
                             ...state.favoritesItems,
-                            [userName]: userItems.filter((product) => product !== newProduct)
+                            [userName]: exist ? userItems.filter((p) => p.id !== newProduct.id) : [...userItems, {...newProduct}]
                         }
-                    })
-                    
-                }
-                return set({
-                    favoritesItems: {
-                        ...state.favoritesItems,
-                        [userName]: [
-                            ...userItems,
-                                newProduct
-                        ]
                     }
                 })
-                
-            },
+            ),
 
             add: (product, userName)=>set((state)=>{
                 if(!userName) return state
@@ -54,7 +36,7 @@ export const useCartStore = create(
                     return{
                         items: {
                             ...state.items,
-                            [userName]: userItems.map(( p ) => p.id === product.id ? {...p, stock: p.stock + 1} : p )
+                            [userName]: userItems.map(( p ) => p.id === product.id ? {...p, quantity: p.quantity + 1} : p )
                         }
                     }
                 }
@@ -70,7 +52,7 @@ export const useCartStore = create(
                                     price: product.price,
                                     img: product.img,
                                     delivery: product.delivery,
-                                    stock: 1
+                                    quantity: 1
                                 }
                             
                         ]                         
@@ -78,23 +60,42 @@ export const useCartStore = create(
                 }
             }),
 
-            delete: (id, userName)=>set((state)=>({
-                items: {
-                    ...state.items,
-                        [userName]: state.items[userName].filter((p)=>p.id !== id)
-                }
-            })),
+            delete: (id, userName)=>set((state)=>{
+                if(!userName) return state
+                const userItems = state.items[userName] || []
 
-            setItems: (userName)=> set((state)=>({items: {...state.items, [userName]: []}})),
+                return{
+                    items:{
+                        ...state.items,
+                        [userName]: userItems.filter((p) => p.id !== id)
+                    },
+                };
+            }),
 
-            disminuir: (id, userName)=> set((state)=>(
-                {
+            clearCart: (userName) => set((state)=>{
+                if(!userName) return state
+
+        
+                return {
+                    items:{
+                        ...state.items,
+                        [userName]: []
+                    }
+                }  
+            }),
+
+            decrease: (id, userName)=> set((state)=>{
+                
+                if(!userName) return state
+                const userItems = state.items[userName] || []
+
+                return {
                     items: { 
                         ...state.items,
-                        [userName]: state.items[userName].map((p)=>p.id === id ? {...p, stock: p.stock - 1 } : p).filter((p)=>p.stock > 0)
+                        [userName]: userItems.map((p)=> p.id === id ? {...p, quantity: p.quantity - 1 } : p).filter((p) => p.quantity > 0)
                     } 
                 }
-            )),
+            }),
 
 
         }),
@@ -107,11 +108,11 @@ export const useCartStore = create(
 
 export const useUserItems = (userName) => useCartStore(useShallow((state)=> state.items[userName] || []))
 
-export const useFavoritesUserItems = (userName) => useCartStore(useShallow((state)=> state.favoritesItems[userName] || []))
+export const useFavoritesUserItems = (userName) => useCartStore(useShallow((state)=> state.favoritesItems[userName] || [] ))
 
-export const useTotalPrice = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.stock * i.price, 0)
+export const useTotalPrice = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.quantity * parseFloat(String(i.price).replace('$', '')), 0)
 
-export const useTotalItems = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.stock, 0) || []
+export const useTotalItems = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.quantity, 0)
 
 
 

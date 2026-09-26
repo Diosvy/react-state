@@ -8,7 +8,6 @@ export default function FavoritePage() {
 
     const user = useAuthStore((state) => state.user)
 
-    console.log('Viendo el user desde la pagina favoritos', user)
 
     const favoritesItems = useFavoritesUserItems(user.name)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
