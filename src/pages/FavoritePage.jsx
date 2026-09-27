@@ -11,6 +11,7 @@ export default function FavoritePage() {
 
     const favoritesItems = useFavoritesUserItems(user.name)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
+    const add = useCartStore((state) => state.add)
 
 
 

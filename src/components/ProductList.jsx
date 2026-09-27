@@ -28,7 +28,7 @@ export default function ProductList() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 className="font-semibold text-3xl text-slate-900 dark:text-white mb-8 text-center">
                         <span data-animate="heading" style={{ opacity: 1 }}>
-                            {["Products", "For", "You"].map((word, i) => (
+                            {["Productos", "Para", "Ti"].map((word, i) => (
                                 <span
                                     key={i}
                                     className="motion-word"
