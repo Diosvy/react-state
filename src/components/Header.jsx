@@ -5,7 +5,7 @@ import { NavLink } from "react-router"
 import { useNavigate } from 'react-router';
 
 
-import { useUIStore } from "../store/useUIStore"
+import { useUIStore, useUserTheme } from "../store/useUIStore"
 import { useAuthStore, useIsLoggedIn } from "../store/useAuthStore";
 
 import { CircleUserRound, UserRoundPlus } from 'lucide-react';
@@ -20,14 +20,21 @@ export default function Header() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const theme = useUIStore((state) => state.theme)
-    const toggleTema = useUIStore((state) => state.toggleTheme)
-    const toggleSidebar = useUIStore((state) => state.toggleSidebar)
+    const user = useAuthStore((state) => state.user)
+
+    const userTheme = useUserTheme(user?.name)
+
+    const publicTheme = useUIStore((state) => state.publicTheme)
+
+    const theme = userTheme ?? publicTheme
+
+    const toggleTheme = useUIStore((state) => state.toggleUserTheme)
+
 
     const isLoggedIn = useIsLoggedIn()
 
     const logout = useAuthStore((state) => state.logout)
-    const user = useAuthStore((state) => state.user)
+
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -107,7 +114,7 @@ export default function Header() {
                             <CartIcon />
                             <button
                                 data-motion="button"
-                                onClick={toggleTema}
+                                onClick={() => toggleTheme(user?.name)}
                                 className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors"
                                 style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}
                             >

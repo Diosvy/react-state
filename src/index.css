@@ -20,13 +20,6 @@ body { font-family: system-ui, sans-serif; }
 
 .cuerpo { display: flex; flex: 1; }
 
-.sidebar {
-  width: 200px;
-  padding: 1rem;
-  border-right: 1px solid #8884;
-}
 
-.sidebar nav { display: flex; flex-direction: column; gap: 0.5rem; }
-.sidebar a { color: inherit; text-decoration: none; }
 
 .contenido { flex: 1;}

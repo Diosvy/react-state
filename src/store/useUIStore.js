@@ -3,22 +3,34 @@ import { persist } from 'zustand/middleware'
 
 export const useUIStore = create(
     persist(
-        (set)=>({
-            theme: 'light', 
-            sidebarOpen: false, 
+        (set, get)=>({
+             
+            defaultTheme: 'light',
+            publicTheme: 'light',
+            userThemeList: {},
 
-            toggleTheme: ()=>
+            togglePublicTheme: () => {
                 set((state)=>({
-                    theme: state.theme === 'light' ? 'dark' : 'light'
-                })),
+                    publicTheme: state.publicTheme === 'light' ? 'dark' : 'light'
+                }))
+            },
             
-            toggleSidebar: ()=>set((state)=>({
-                sidebarOpen: !state.sidebarOpen
-            })),
+            toggleUserTheme: (userName) => set((state)=>{
+                if(!userName) return state 
 
-            setSidebar: ()=>{
-                set((open)=>({sidebarOpen: open}))
-            }
+                const current = state.userThemeList[userName] || 'light'
+
+                const next = current === 'light' ? 'dark' : 'light'
+                
+                
+                return {
+                    userThemeList: {
+                        ...state.userThemeList,
+                        [userName]: next
+                    }
+                }
+            })
+                
 
         })
         , 
@@ -28,3 +40,5 @@ export const useUIStore = create(
     )
     
 )
+
+export const useUserTheme = ( userName ) => useUIStore((state) => state.userThemeList[userName])

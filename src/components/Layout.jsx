@@ -1,16 +1,26 @@
 // src/components/Layout.jsx
-import { useUIStore } from '../store/useUIStore'
+import { useUIStore, useUserTheme } from '../store/useUIStore'
+import { useAuthStore } from '../store/useAuthStore';
+
 import Header from './Header'
-import Sidebar from './Sidebar'
+
 import Spinner from './Spinner';
 
 import { Outlet, useNavigation } from 'react-router';
 
 export default function Layout({ children }) {
 
+    const user = useAuthStore((state) => state.user)
+
     const navigation = useNavigation()
-    const theme = useUIStore((state) => state.theme)
-    const sidebarOpen = useUIStore((state) => state.sidebarOpen)
+
+    const userTheme = useUserTheme(user?.name)
+
+    const publicTheme = useUIStore((state) => state.publicTheme)
+
+
+    const theme = userTheme ? userTheme : publicTheme
+
 
 
 

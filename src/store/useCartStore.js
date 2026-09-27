@@ -26,7 +26,7 @@ export const useCartStore = create(
                 })
             ),
 
-            add: (product, userName)=>set((state)=>{
+            add: (product, userName) => set((state)=>{
                 if(!userName) return state
 
                 const userItems = state.items[userName] || []
@@ -60,7 +60,7 @@ export const useCartStore = create(
                 }
             }),
 
-            delete: (id, userName)=>set((state)=>{
+            delete: (id, userName) => set((state)=>{
                 if(!userName) return state
                 const userItems = state.items[userName] || []
 
@@ -84,7 +84,7 @@ export const useCartStore = create(
                 }  
             }),
 
-            decrease: (id, userName)=> set((state)=>{
+            decrease: (id, userName) => set((state)=>{
                 
                 if(!userName) return state
                 const userItems = state.items[userName] || []

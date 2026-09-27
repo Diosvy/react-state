@@ -16,8 +16,8 @@ export default function Login({ setLink }) {
 
     const [error, setError] = useState(null);
 
-    const theme = useUIStore((state) => state.theme)
-    const toggleTheme = useUIStore((state) => state.toggleTheme)
+    const theme = useUIStore((state) => state.publicTheme)
+    const toggleTheme = useUIStore((state) => state.togglePublicTheme)
 
     const login = useAuthStore((state) => state.login)
     const user = useAuthStore((state) => state.user)
