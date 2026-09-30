@@ -22,23 +22,20 @@ export default function Login({ setLink }) {
     const login = useAuthStore((state) => state.login)
     const user = useAuthStore((state) => state.user)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Aquí luego conectarás con tu store de Zustand:
         if (!name || !password) {
-            return null
+            return
         }
-        const result = login(name, password)
+        const result = await login(name, password)
 
         if (result.error) {
             setError(result.error)
-            return null
+            return
         }
 
-        navigate('/')
-
-
-
+        return navigate('/')
     };
 
     return (

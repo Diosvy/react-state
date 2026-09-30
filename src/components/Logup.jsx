@@ -19,25 +19,27 @@ export default function Logup({ setLink }) {
     const theme = useUIStore((state) => state.publicTheme)
     const toggleTheme = useUIStore((state) => state.togglePublicTheme)
 
-    const logup = useAuthStore((state) => state.logup)
+    const register = useAuthStore((state) => state.register)
     const users = useAuthStore((state) => state.users)
     const user = useAuthStore((state) => state.user)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!name || !password) {
-            return null
+            return
         }
         if (password != confirmPassword) {
             setError('Las contraseñas no coinciden')
-            return null
+            return
         }
-        const result = logup(name, password)
+        const { error } = await register(name, password)
 
-        if (result.error) {
-            setError(result.error)
-            return null
+        console.log(error)
+
+        if (error) {
+            setError(error)
+            return
         }
         return navigate('/');
     };
