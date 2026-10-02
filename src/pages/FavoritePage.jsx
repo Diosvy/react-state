@@ -4,28 +4,22 @@ import { Link } from 'react-router'
 import { useCartStore, useFavoritesUserItems } from '../store/useCartStore'
 import { useAuthStore } from '../store/useAuthStore'
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 
+import { useProduct, usefilteredFavoriteProducts } from '../hooks/useProduct'
 
 export default function FavoritePage() {
 
-    const user = useAuthStore((state) => state.user)
+    const [search, setSearch] = useState('')
+    const { filterBy } = usefilteredFavoriteProducts()
+    const filteredProducts = filterBy(search)
 
-
-    const favoritesItems = useFavoritesUserItems(user.name)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
     const add = useCartStore((state) => state.add)
 
-
-    const [search, setSearch] = useState('')
-
-    const filteredProducts = useMemo(() => {
-        return search
-            ? favoritesItems.filter((i) => i.name.toLowerCase().includes(search.toLowerCase()))
-            : favoritesItems;
-    }, [favoritesItems, search]);
-
-
+    const countRenders = useRef(1)
+    console.log('Render #', countRenders.current)
+    countRenders.current++
 
     return (
         <section
@@ -62,7 +56,7 @@ export default function FavoritePage() {
                 {
                     filteredProducts.length !== 0 && (
                         <p className="font-normal text-center text-slate-500 dark:text-neutral-400  text-md mb-3">
-                            {favoritesItems.length} {favoritesItems.length === 1 ? 'producto' : 'productos'} en tus favoritos
+                            {filteredProducts.length} {filteredProducts.length === 1 ? 'producto' : 'productos'} en tus favoritos
                         </p>
                     )
                 }

@@ -10,51 +10,23 @@ import { Suspense, useRef, useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router'
 import Spinner from './Spinner';
 
+import { useProduct } from '../hooks/useProduct';
+
 
 
 
 export default function ProductList() {
 
-    const { productos } = useLoaderData();
-
     const user = useAuthStore((state) => state.user)
     const add = useCartStore((state) => state.add)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [search, setSearch] = useState(searchParams.get('q') ?? '');
-
-    useEffect(() => {
-        console.log('🟢 MONTAJE');
-        return () => console.log('🔴 DESMONTAJE');
-    }, []);
-
-    const prev = useRef(productos);
-    console.log('¿misma ref?', prev.current === productos);
-
-    const renderCount = useRef(0);
-    renderCount.current++;
-    console.log(`Render #${renderCount.current}`, {
-        search,
-        urlQ: searchParams.get("q"),
-        productos: productos?.length,
-    });
 
 
+    const [search, setSearch] = useState('');
+    const { productos } = useProduct({ search })
 
 
-    useEffect(() => {
-        const currentQ = searchParams.get('q') ?? '';
-
-        if (search === currentQ) return;
-
-        const id = setTimeout(() => {
-            setSearchParams(search ? { q: search } : {}, { replace: true })
-        }, 300);
-
-        return () => clearTimeout(id)
-
-    }, [search, setSearchParams])
 
 
     return (
