@@ -3,30 +3,68 @@ import { PlusCircle, Heart } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
+
 import { useLoaderData, Await } from "react-router";
 
-import { Suspense } from 'react'
+import { Suspense, useRef, useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router'
 import Spinner from './Spinner';
 
 
 
 
 export default function ProductList() {
+
     const { productos } = useLoaderData();
 
     const user = useAuthStore((state) => state.user)
-
     const add = useCartStore((state) => state.add)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [search, setSearch] = useState(searchParams.get('q') ?? '');
+
+    useEffect(() => {
+        console.log('🟢 MONTAJE');
+        return () => console.log('🔴 DESMONTAJE');
+    }, []);
+
+    const prev = useRef(productos);
+    console.log('¿misma ref?', prev.current === productos);
+
+    const renderCount = useRef(0);
+    renderCount.current++;
+    console.log(`Render #${renderCount.current}`, {
+        search,
+        urlQ: searchParams.get("q"),
+        productos: productos?.length,
+    });
+
+
+
+
+    useEffect(() => {
+        const currentQ = searchParams.get('q') ?? '';
+
+        if (search === currentQ) return;
+
+        const id = setTimeout(() => {
+            setSearchParams(search ? { q: search } : {}, { replace: true })
+        }, 300);
+
+        return () => clearTimeout(id)
+
+    }, [search, setSearchParams])
+
 
     return (
         <Suspense fallback={<Spinner />} >
             <section
                 id="_productlist_bordered_cards_delivery_001"
-                className="py-10 "
+                className="py-0 "
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="font-semibold text-3xl text-slate-900 dark:text-white mb-8 text-center">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
+                    <h2 className="font-semibold text-3xl text-slate-900 dark:text-white mb-2 text-center">
                         <span data-animate="heading" style={{ opacity: 1 }}>
                             {["Productos", "Para", "Ti"].map((word, i) => (
                                 <span
@@ -44,13 +82,19 @@ export default function ProductList() {
                             ))}
                         </span>
                     </h2>
+                    <div className='' >
+                        <form className='mx-auto w-1/2  flex justify-center gap-2'  >
+                            <input type="text" placeholder="Titulo..." className='p-2 w-full rounded border border-amber-50 text-amber-50' value={search} onChange={(e) => setSearch(e.target.value)} />
+                            <button className='rounded px-6 py-2 hover:bg-indigo-900 transition-colors bg-indigo-500 text-white cursor-pointer ' >Buscar</button>
+                        </form>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
 
                         <Await resolve={productos} >
                             {(productosNuevos) => (
                                 productosNuevos.map((product, i) => (
                                     <div
-                                        key={i}
+                                        key={product.id}
                                         className="card mx-auto w-full max-w-sm md:mr-0 group"
                                         data-motion="card"
                                         style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}

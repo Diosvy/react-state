@@ -1,13 +1,19 @@
-export const productLoader = async () => {
+export const productLoader = async ({request}) => {
+
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q") ?? "";
+
+
   const mod = await import('../data/productos.js');
   const { productos } = mod;
 
-  
-  const productosPromise = new Promise((resolve) =>
-    setTimeout(() => resolve(productos), 2000)
-  );
+  if (!q) return { productos };
 
-  return { productos: productosPromise };
+  return {
+    productos: productos.filter((p) =>
+      p.name.toLowerCase().includes(q.toLowerCase())
+    ),
+  };
+
 };
-
 

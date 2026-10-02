@@ -4,6 +4,9 @@ import { Link } from 'react-router'
 import { useCartStore, useFavoritesUserItems } from '../store/useCartStore'
 import { useAuthStore } from '../store/useAuthStore'
 
+import { useMemo, useState, useEffect } from "react"
+
+
 export default function FavoritePage() {
 
     const user = useAuthStore((state) => state.user)
@@ -14,13 +17,22 @@ export default function FavoritePage() {
     const add = useCartStore((state) => state.add)
 
 
+    const [search, setSearch] = useState('')
+
+    const filteredProducts = useMemo(() => {
+        return search
+            ? favoritesItems.filter((i) => i.name.toLowerCase().includes(search.toLowerCase()))
+            : favoritesItems;
+    }, [favoritesItems, search]);
+
+
 
     return (
         <section
             id="_productlist_bordered_cards_delivery_001"
             className="py-2 h-full "
         >
-            <div className="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full  ">
+            <div className="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full gap-2  ">
                 <h2 className="font-semibold text-3xl text-slate-900 dark:text-white  text-center ">
                     <span data-animate="heading" style={{ opacity: 1 }} className='block' >
                         {["Tus ", "Favoritos"].map((word, i) => (
@@ -40,8 +52,15 @@ export default function FavoritePage() {
                     </span>
 
                 </h2>
+                <div className='' >
+                    <form className='mx-auto w-1/2  flex justify-center gap-2'  >
+                        <input type="text" placeholder="Titulo..." className='p-2 w-full rounded border border-amber-50 text-amber-50' value={search} onChange={(e) => setSearch(e.target.value)} />
+
+                        <button className='rounded px-6 py-2 hover:bg-indigo-900 transition-colors bg-indigo-500 text-white cursor-pointer ' >Buscar</button>
+                    </form>
+                </div>
                 {
-                    favoritesItems.length !== 0 && (
+                    filteredProducts.length !== 0 && (
                         <p className="font-normal text-center text-slate-500 dark:text-neutral-400  text-md mb-3">
                             {favoritesItems.length} {favoritesItems.length === 1 ? 'producto' : 'productos'} en tus favoritos
                         </p>
@@ -49,7 +68,7 @@ export default function FavoritePage() {
                 }
 
 
-                {favoritesItems.length === 0 && (
+                {filteredProducts.length === 0 && (
                     <div className="flex-1 flex items-center justify-center  ">
                         <div className="text-center max-w-md">
                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-neutral-800 mb-6">
@@ -73,9 +92,9 @@ export default function FavoritePage() {
                 }
                 <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
                     {
-                        favoritesItems.map((product, i) => (
+                        filteredProducts.map((product, i) => (
                             <div
-                                key={i}
+                                key={product.id}
                                 className="card mx-auto w-full max-w-sm md:mr-0 group"
                                 data-motion="card"
                                 style={{ opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }}
