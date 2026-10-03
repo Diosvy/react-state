@@ -12,6 +12,8 @@ import Spinner from './Spinner';
 
 import { useProduct } from '../hooks/useProduct';
 
+import FiltersBar from './FiltersBar';
+
 
 
 
@@ -21,11 +23,11 @@ export default function ProductList() {
     const add = useCartStore((state) => state.add)
     const toggleFavoriteItem = useCartStore((state) => state.toggleFavoriteItem)
 
+    const { productos } = useLoaderData();
 
-
-    const [search, setSearch] = useState('');
-    const { productos } = useProduct({ search })
-
+    const countRef = useRef(1)
+    console.log('Render #', countRef.current)
+    countRef.current++
 
 
 
@@ -54,12 +56,8 @@ export default function ProductList() {
                             ))}
                         </span>
                     </h2>
-                    <div className='' >
-                        <form className='mx-auto w-1/2  flex justify-center gap-2'  >
-                            <input type="text" placeholder="Titulo..." className='p-2 w-full rounded border border-amber-50 text-amber-50' value={search} onChange={(e) => setSearch(e.target.value)} />
-                            <button className='rounded px-6 py-2 hover:bg-indigo-900 transition-colors bg-indigo-500 text-white cursor-pointer ' >Buscar</button>
-                        </form>
-                    </div>
+                    <FiltersBar />
+
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8">
 
                         <Await resolve={productos} >

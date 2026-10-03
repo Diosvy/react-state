@@ -7,15 +7,11 @@ import { Link } from "react-router"
 export default function Checkout() {
 
     const user = useAuthStore((state) => state.user)
-
-
     const items = useUserItems(user.name) || []
 
     const clearCart = useCartStore((state) => state.clearCart)
-
     const add = useCartStore((state) => state.add);
     const del = useCartStore((state) => state.delete);
-
     const decrease = useCartStore((state) => state.decrease);
 
     const subtotal = useTotalPrice(user.name);

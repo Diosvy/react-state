@@ -2,6 +2,8 @@ import {create} from 'zustand'
 import {persist} from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow';
 
+import { useMemo } from 'react'
+
 export const useCartStore = create(
     persist(
         (set, get)=>({
@@ -110,9 +112,21 @@ export const useUserItems = (userName) => useCartStore(useShallow((state)=> stat
 
 export const useFavoritesUserItems = (userName) => useCartStore(useShallow((state)=> state.favoritesItems[userName] || [] ))
 
-export const useTotalPrice = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.quantity * parseFloat(String(i.price).replace('$', '')), 0)
+export const useTotalPrice = (userName) => {
+    const userItems = useUserItems(userName) ?? []
+    return useMemo(() => {
+        return userItems.reduce((acc, i)=> acc + i.quantity * parseFloat(String(i.price).replace('$', '')), 0)
+    }, [userItems])
+   
+}
 
-export const useTotalItems = (userName) => useUserItems(userName).reduce((acc, i)=> acc + i.quantity, 0)
+export const useTotalItems = (userName) => {
+    const userItems = useUserItems(userName) ?? []
+
+    return useMemo(() => {
+        return userItems.reduce((acc, i)=> acc + i.quantity, 0)
+    }, [userItems])
+}
 
 
 
